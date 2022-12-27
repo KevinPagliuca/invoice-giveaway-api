@@ -1,6 +1,6 @@
 import { NullOptional } from 'app/http/decorators/null-optional.decorator';
-import { CNPJRegex } from 'app/shared/validators';
-import { IsNotEmpty, Matches, IsDateString, IsNumber } from 'class-validator';
+import { CNPJRegex, DateRegex } from 'app/shared/validators';
+import { IsNotEmpty, Matches } from 'class-validator';
 
 export class UpdateInvoiceDTO {
   @IsNotEmpty({ message: 'O CNPJ é obrigatório' })
@@ -14,13 +14,14 @@ export class UpdateInvoiceDTO {
   @NullOptional()
   number: string;
 
-  @IsNotEmpty({ message: 'A data de emissão é obrigatória' })
-  @IsDateString({}, { message: 'Formato da data de emissão inválido' })
+  @IsNotEmpty({ message: 'A data da NF é obrigatória' })
+  @Matches(DateRegex, {
+    message: 'Formato da data da NF inválido, Exemplo: YYYY-MM-DD ou YYYY/MM/DD',
+  })
   @NullOptional()
-  date: Date;
+  date: string;
 
   @IsNotEmpty({ message: 'O valor total é obrigatório' })
-  @IsNumber({}, { message: 'O valor total deve ser um número' })
   @NullOptional()
-  totalValue: number;
+  totalValue: string;
 }

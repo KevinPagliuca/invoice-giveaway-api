@@ -1,5 +1,5 @@
-import { CNPJRegex } from 'app/shared/validators';
-import { IsDateString, IsNotEmpty, IsNumber, Matches } from 'class-validator';
+import { CNPJRegex, DateRegex } from 'app/shared/validators';
+import { IsNotEmpty, Matches } from 'class-validator';
 
 export class CreateInvoiceDTO {
   @IsNotEmpty({ message: 'O CNPJ é obrigatório' })
@@ -8,14 +8,15 @@ export class CreateInvoiceDTO {
   })
   cnpj: string;
 
-  @IsNotEmpty({ message: 'O número da nota fiscal é obrigatório' })
+  @IsNotEmpty({ message: 'O número da NF é obrigatório' })
   number: string;
 
-  @IsNotEmpty({ message: 'A data de emissão é obrigatória' })
-  @IsDateString({}, { message: 'Formato da data de emissão inválido' })
-  date: Date;
+  @IsNotEmpty({ message: 'A data da NF é obrigatória' })
+  @Matches(DateRegex, {
+    message: 'Formato da data da NF inválido, Exemplo: YYYY-MM-DD ou YYYY/MM/DD',
+  })
+  date: string;
 
   @IsNotEmpty({ message: 'O valor total é obrigatório' })
-  @IsNumber({}, { message: 'O valor total deve ser um número' })
-  totalValue: number;
+  totalValue: string;
 }

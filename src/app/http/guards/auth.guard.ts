@@ -9,11 +9,11 @@ import {
 import { verify } from 'jsonwebtoken';
 
 import { UserEntity } from 'database/Entities/user.entity';
-import { UsersService } from '../modules/users/users.service';
+import { PrismaService } from 'database/prisma/prisma.service';
 
 @Injectable()
 export class AuthorizationGuard implements CanActivate {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
@@ -23,7 +23,9 @@ export class AuthorizationGuard implements CanActivate {
 
     const { sub: userId } = verify(token, process.env.JWT_SECRET);
 
-    const user = await this.usersService.getUserById(userId as string);
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId as string },
+    });
 
     if (!user)
       throw new NotFoundException('Você não está autenticado, o usuário desse token não existe');

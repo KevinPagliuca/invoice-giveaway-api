@@ -1,5 +1,5 @@
-import { CEPRegex, CPFRegex } from 'app/shared/validators';
-import { IsDateString, IsEmail, IsOptional, IsNotEmpty, Matches } from 'class-validator';
+import { CEPRegex, CPFRegex, DateRegex } from 'app/shared/validators';
+import { IsEmail, IsOptional, IsNotEmpty, Matches } from 'class-validator';
 
 export class CreateUserDTO {
   @IsNotEmpty({ message: 'O CPF é obrigatório' })
@@ -14,20 +14,22 @@ export class CreateUserDTO {
   @IsEmail({}, { message: 'Formato do e-mail inválido' })
   email: string;
 
-  @IsDateString({}, { message: 'Formato da data de nascimento inválido' })
   @IsNotEmpty({ message: 'A data de nascimento é obrigatória' })
-  birthDate: Date;
+  @Matches(DateRegex, {
+    message: 'Formato da data de nascimento inválido, Exemplo: YYYY-MM-DD ou YYYY/MM/DD',
+  })
+  birthDate: string;
 
   @IsNotEmpty()
   @IsOptional()
   rg?: string;
 
-  @IsNotEmpty({ message: 'O telefone é obrigatório' })
-  cellphone: string;
+  @IsNotEmpty({ message: 'O telefone principal é obrigatório' })
+  mainPhone: string;
 
   @IsNotEmpty()
   @IsOptional()
-  cellphone_secondary?: string;
+  secondaryPhone?: string;
 
   @IsNotEmpty({ message: 'O CEP é obrigatório' })
   @Matches(CEPRegex, {
@@ -41,9 +43,7 @@ export class CreateUserDTO {
   @IsNotEmpty({ message: 'O número é obrigatório' })
   number: string;
 
-  @IsNotEmpty({
-    message: 'O bairro é obrigatório',
-  })
+  @IsNotEmpty({ message: 'O bairro é obrigatório' })
   district: string;
 
   @IsNotEmpty()
@@ -56,8 +56,6 @@ export class CreateUserDTO {
   @IsNotEmpty({ message: 'O estado é obrigatório' })
   state: string;
 
-  @IsNotEmpty({
-    message: 'A senha é obrigatória',
-  })
+  @IsNotEmpty({ message: 'A senha é obrigatória' })
   password: string;
 }
