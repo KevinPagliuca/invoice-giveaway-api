@@ -6,16 +6,18 @@ export class UserEntity {
   name: string;
   email: string;
   birthDate: Date;
-  rg: string | null;
-  cellphone: string;
-  cellphone_secondary: string | null;
+
+  rg?: string | null;
+  mainPhone: string;
+  secondaryPhone?: string | null;
   zipCode: string;
   street: string;
   district: string;
   number: string;
-  complement: string | null;
+  complement?: string | null;
   city: string;
   state: string;
+
   createdAt: Date;
   updatedAt: Date;
 

@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  InternalServerErrorException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from 'database/prisma/prisma.service';
 import { CreateUserDTO } from './interfaces/create';
 import { sign } from 'jsonwebtoken';
@@ -52,13 +57,14 @@ export class UsersService {
     const userByCPF = await this.getUserByCPF(body.cpf);
     const userByEmail = await this.getUserByEmail(body.email);
 
-    if (userByCPF) throw new NotFoundException('CPF já cadastrado');
-    if (userByEmail) throw new NotFoundException('E-mail já cadastrado');
+    if (userByCPF) throw new BadRequestException('CPF já cadastrado');
+    if (userByEmail) throw new BadRequestException('E-mail já cadastrado');
 
     try {
       const newUser = await this.prisma.user.create({
         data: {
           ...body,
+          birthDate: new Date(body.birthDate),
           password: hashedPassword,
         },
       });
@@ -78,10 +84,14 @@ export class UsersService {
 
     if (!user) throw new NotFoundException('Usuário não encontrado');
 
+    const birthDate = body.birthDate ? new Date(body.birthDate) : user.birthDate;
     try {
       const updatedUser = await this.prisma.user.update({
         where: { id },
-        data: body,
+        data: {
+          ...body,
+          birthDate,
+        },
       });
 
       return new UserEntity(updatedUser);
@@ -112,9 +122,9 @@ export class UsersService {
     if (!user) throw new NotFoundException('Usuário não encontrado');
 
     const isPasswordValid = await compare(password, user.password);
-    if (!isPasswordValid) throw new NotFoundException('E-mail ou senha inválidos');
+    if (!isPasswordValid) throw new BadRequestException('E-mail ou senha inválidos');
 
-    const token = await this.generateJWT(user.id);
+    const token = this.generateJWT(user.id);
 
     return { user: new UserEntity(user), token };
   }

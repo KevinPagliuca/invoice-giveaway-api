@@ -1,15 +1,17 @@
 import { NullOptional } from 'app/http/decorators/null-optional.decorator';
-import { CEPRegex } from 'app/shared/validators';
-import { IsDateString, IsOptional, IsNotEmpty, Matches } from 'class-validator';
+import { CEPRegex, DateRegex } from 'app/shared/validators';
+import { IsOptional, IsNotEmpty, Matches } from 'class-validator';
 
 export class UpdateUserDTO {
   @IsNotEmpty({ message: 'O nome é obrigatório' })
   @NullOptional()
   name: string;
 
-  @IsDateString({}, { message: 'Formato da data de nascimento inválido' })
   @NullOptional()
-  birthDate: Date;
+  @Matches(DateRegex, {
+    message: 'Formato da data de nascimento inválido, Exemplo: YYYY-MM-DD ou YYYY/MM/DD',
+  })
+  birthDate: string;
 
   @IsNotEmpty()
   @IsOptional()
@@ -17,11 +19,11 @@ export class UpdateUserDTO {
 
   @IsNotEmpty({ message: 'O telefone é obrigatório' })
   @NullOptional()
-  cellphone: string;
+  mainPhone: string;
 
   @IsNotEmpty()
   @IsOptional()
-  cellphone_secondary?: string;
+  secondaryPhone?: string;
 
   @IsNotEmpty({ message: 'O CEP é obrigatório' })
   @Matches(CEPRegex, {
@@ -38,9 +40,7 @@ export class UpdateUserDTO {
   @NullOptional()
   number: string;
 
-  @IsNotEmpty({
-    message: 'O bairro é obrigatório',
-  })
+  @IsNotEmpty({ message: 'O bairro é obrigatório' })
   @NullOptional()
   district: string;
 

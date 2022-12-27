@@ -29,10 +29,16 @@ export class InvoicesController {
     return this.invoicesService.getAll();
   }
 
-  @Get('/:id')
+  @Get('/find/:id')
   @UseGuards(AuthorizationGuard)
   getInvoiceById(@Param('id') id: string) {
     return this.invoicesService.getById(id);
+  }
+
+  @Get('/mine')
+  @UseGuards(AuthorizationGuard)
+  getMyInvoices(@CurrentUser() { user }: ICurrentUser) {
+    return this.invoicesService.getByUserId(user.id);
   }
 
   @Post('/create')
