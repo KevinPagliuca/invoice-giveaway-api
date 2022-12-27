@@ -1,10 +1,4 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 
 import { verify } from 'jsonwebtoken';
 
@@ -19,7 +13,14 @@ export class AuthorizationGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
     const token = req.headers.authorization?.split(' ')[1];
 
-    if (!token) throw new UnauthorizedException('Não autenticado, token não encontrado');
+    if (!token) {
+      throw new UnauthorizedException({
+        error: 'Unauthorized',
+        message: 'Não autenticado, token não encontrado',
+        type: 'auth_token',
+        statusCode: 401,
+      });
+    }
 
     const { sub: userId } = verify(token, process.env.JWT_SECRET);
 
@@ -27,8 +28,14 @@ export class AuthorizationGuard implements CanActivate {
       where: { id: userId as string },
     });
 
-    if (!user)
-      throw new NotFoundException('Você não está autenticado, o usuário desse token não existe');
+    if (!user) {
+      throw new UnauthorizedException({
+        error: 'Unauthorized',
+        message: 'Você não está autenticado, o usuário desse token não existe',
+        type: 'auth_token',
+        statusCode: 401,
+      });
+    }
 
     req.user = new UserEntity(user);
     req.token = token;

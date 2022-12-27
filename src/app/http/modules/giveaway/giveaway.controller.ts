@@ -27,7 +27,7 @@ export class GiveawayController {
 
   @Get('/active')
   getActive() {
-    return this.giveawayService.getActiveGiveaway(true);
+    return this.giveawayService.getActiveGiveaway();
   }
 
   @Post('/create')

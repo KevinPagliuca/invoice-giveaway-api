@@ -94,7 +94,7 @@ export class GiveawayService {
     if (giveaway) {
       const participants = await this.getParticipantsByGivewayId(giveaway.id);
       return { ...giveaway, participants };
-    } else return null;
+    } else return giveaway;
   }
 
   async create(body: CreateGiveawayDTO) {

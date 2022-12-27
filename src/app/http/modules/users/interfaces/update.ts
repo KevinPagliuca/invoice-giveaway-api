@@ -13,7 +13,6 @@ export class UpdateUserDTO {
   })
   birthDate: string;
 
-  @IsNotEmpty()
   @IsOptional()
   rg?: string;
 
@@ -21,7 +20,6 @@ export class UpdateUserDTO {
   @NullOptional()
   mainPhone: string;
 
-  @IsNotEmpty()
   @IsOptional()
   secondaryPhone?: string;
 
@@ -44,9 +42,7 @@ export class UpdateUserDTO {
   @NullOptional()
   district: string;
 
-  @IsNotEmpty()
   @IsOptional()
-  @NullOptional()
   complement?: string;
 
   @IsNotEmpty({ message: 'A cidade é obrigatória' })

@@ -76,6 +76,7 @@ export class InvoicesService {
         userId,
         status,
         luckyCode,
+        giveawayId: activeGiveaway?.id,
         totalValue: Number(body.totalValue),
       },
       include: this.giveawayInclude,

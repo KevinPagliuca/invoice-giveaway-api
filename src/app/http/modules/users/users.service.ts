@@ -59,12 +59,13 @@ export class UsersService {
 
     if (userByCPF) throw new BadRequestException('CPF já cadastrado');
     if (userByEmail) throw new BadRequestException('E-mail já cadastrado');
-
+    const birthDate = new Date(body.birthDate);
+    birthDate.setUTCHours(12, 0, 0, 0);
     try {
       const newUser = await this.prisma.user.create({
         data: {
           ...body,
-          birthDate: new Date(body.birthDate),
+          birthDate,
           password: hashedPassword,
         },
       });
@@ -84,7 +85,8 @@ export class UsersService {
 
     if (!user) throw new NotFoundException('Usuário não encontrado');
 
-    const birthDate = body.birthDate ? new Date(body.birthDate) : user.birthDate;
+    const birthDate = body.birthDate ? new Date(body.birthDate) : new Date(user.birthDate);
+    birthDate.setUTCHours(12, 0, 0, 0);
     try {
       const updatedUser = await this.prisma.user.update({
         where: { id },
