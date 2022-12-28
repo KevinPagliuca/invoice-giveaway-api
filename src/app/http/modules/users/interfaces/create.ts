@@ -20,14 +20,12 @@ export class CreateUserDTO {
   })
   birthDate: string;
 
-  @IsNotEmpty()
   @IsOptional()
   rg?: string;
 
   @IsNotEmpty({ message: 'O telefone principal é obrigatório' })
   mainPhone: string;
 
-  @IsNotEmpty()
   @IsOptional()
   secondaryPhone?: string;
 
@@ -46,7 +44,6 @@ export class CreateUserDTO {
   @IsNotEmpty({ message: 'O bairro é obrigatório' })
   district: string;
 
-  @IsNotEmpty()
   @IsOptional()
   complement?: string;
 

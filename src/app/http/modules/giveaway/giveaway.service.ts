@@ -5,12 +5,12 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { GiveawayStatusEnum } from 'app/shared/giveaway-status';
 import { InvoiceGiveawayStatusEnum } from 'app/shared/invoice-giveaway-status';
 import { DateRegex } from 'app/shared/validators';
 import { PrismaService } from 'database/prisma/prisma.service';
-import { format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { generateRandomId } from 'utils/generate-id';
 import { CreateGiveawayDTO } from './interfaces/create';
@@ -196,8 +196,50 @@ export class GiveawayService {
     }
   }
 
-  // @Cron('*/5 * * * * *') // every 5 seconds - for testing
-  @Cron('0 6 * * *') // 06:00 AM - every day
+  @Cron(CronExpression.EVERY_10_MINUTES)
+  async createGiveaway() {
+    const hasActiveGiveaway = await this.getActiveGiveaway();
+
+    if (hasActiveGiveaway) return;
+
+    const today = new Date();
+    const startDate = this.setDateTO6AM(today);
+    const endDate = this.setDateTO6AM(addDays(today, 7));
+
+    let referenceId = generateRandomId();
+    const MAX_TRIES = 5;
+
+    for (let i = 0; i < MAX_TRIES; i++) {
+      if (i === MAX_TRIES - 1) {
+        throw new InternalServerErrorException(
+          'Ocorreu um erro ao tentarmos criar o sorteio, tente novamente mais tarde!'
+        );
+      }
+
+      const giveaway = await this.getGiveawayByReference(referenceId);
+      if (!giveaway) break;
+      referenceId = generateRandomId();
+    }
+
+    const giveaway = await this.prisma.giveaway.create({
+      data: {
+        reference: referenceId,
+        status: GiveawayStatusEnum.IN_PROGRESS,
+        startDate,
+        endDate,
+      },
+    });
+
+    await this.prisma.invoice.updateMany({
+      where: { giveawayId: null, status: InvoiceGiveawayStatusEnum.WAITING },
+      data: {
+        giveawayId: giveaway.id,
+        status: InvoiceGiveawayStatusEnum.PENDING,
+      },
+    });
+  }
+
+  @Cron(CronExpression.EVERY_HOUR)
   async sortGiveawayWinner() {
     const giveaway = await this.getActiveGiveaway();
 
