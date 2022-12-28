@@ -6,7 +6,6 @@ export class UserEntity {
   name: string;
   email: string;
   birthDate: Date;
-
   rg?: string | null;
   mainPhone: string;
   secondaryPhone?: string | null;
@@ -17,6 +16,8 @@ export class UserEntity {
   complement?: string | null;
   city: string;
   state: string;
+
+  recoverPassCode?: string | null;
 
   createdAt: Date;
   updatedAt: Date;

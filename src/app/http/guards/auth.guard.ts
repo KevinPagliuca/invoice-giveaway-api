@@ -11,7 +11,7 @@ export class AuthorizationGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
-    const token = req.headers.authorization?.split(' ')[1];
+    const [, token] = req.headers.authorization?.split(' ');
 
     if (!token) {
       throw new UnauthorizedException({

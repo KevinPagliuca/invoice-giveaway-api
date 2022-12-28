@@ -3,6 +3,7 @@ import {
   NotFoundException,
   InternalServerErrorException,
   BadRequestException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'database/prisma/prisma.service';
 import { CreateUserDTO } from './interfaces/create';
@@ -12,10 +13,16 @@ import { compare, hash } from 'bcryptjs';
 import { AuthCredentialsDTO } from './interfaces/auth';
 import { UserEntity } from 'database/Entities/user.entity';
 import { UpdateUserDTO } from './interfaces/update';
+import { RecoverPasswordDTO, ResetPasswordDTO } from './interfaces/recover-password';
+import { SendgridService } from '../sendgrid/sendgrid.service';
+import { generateRandomId } from 'utils/generate-id';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly sendgridService: SendgridService
+  ) {}
 
   private generateJWT(userId: string) {
     return sign({ userId }, process.env.JWT_SECRET, {
@@ -129,5 +136,48 @@ export class UsersService {
     const token = this.generateJWT(user.id);
 
     return { user: new UserEntity(user), token };
+  }
+
+  async recoverPassword(recoverPassword: RecoverPasswordDTO) {
+    const user = await this.getUserByCPF(recoverPassword.cpf);
+    if (!user) throw new NotFoundException('Usuário não encontrado');
+
+    const recoverPassCode = generateRandomId(6);
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { recoverPassCode },
+    });
+
+    await this.sendgridService.send({
+      from: process.env.SENDGRID_SENDER_EMAIL,
+      to: user.email,
+      templateId: 'd-1c75f9c61fba4e2099af3893a41e05f8',
+      dynamicTemplateData: {
+        username: user.name,
+        code: recoverPassCode,
+      },
+    });
+
+    return { message: 'Código para redefinição de senha enviado para o e-mail: ' + user.email };
+  }
+
+  async resetPassword({ code, confirmation, cpf, password }: ResetPasswordDTO) {
+    if (password !== confirmation) throw new BadRequestException('As senhas não conferem');
+
+    const user = await this.getUserByCPF(cpf);
+    if (!user) throw new NotFoundException('Usuário não encontrado');
+
+    if (user.recoverPassCode !== code)
+      throw new UnauthorizedException('Código de recuperação inválido');
+
+    const hashedPassword = await hash(password, 10);
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { password: hashedPassword, recoverPassCode: null },
+    });
+
+    return { message: 'Senha alterada com sucesso!' };
   }
 }

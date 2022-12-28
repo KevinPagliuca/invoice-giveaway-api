@@ -28,6 +28,8 @@ model User {
   state          String
   password       String
 
+  recoverPassCode String?
+
   invoices  Invoice[]
   giveaways Giveaway[]
   createdAt DateTime   @default(now())

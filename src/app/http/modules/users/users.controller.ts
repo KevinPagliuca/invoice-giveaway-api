@@ -16,6 +16,7 @@ import { CurrentUser } from 'app/http/decorators/current-user.decorator';
 import { AuthorizationGuard } from 'app/http/guards/auth.guard';
 import { AuthCredentialsDTO, ICurrentUser } from './interfaces/auth';
 import { CreateUserDTO } from './interfaces/create';
+import { RecoverPasswordDTO, ResetPasswordDTO } from './interfaces/recover-password';
 import { UpdateUserDTO } from './interfaces/update';
 import { UsersService } from './users.service';
 
@@ -51,6 +52,16 @@ export class UsersController {
   @Post('/auth')
   auth(@Body() authCredentialsDTO: AuthCredentialsDTO) {
     return this.usersService.auth(authCredentialsDTO);
+  }
+
+  @Post('/recover-password')
+  recoverPassword(@Body() recoverPasswordDTO: RecoverPasswordDTO) {
+    return this.usersService.recoverPassword(recoverPasswordDTO);
+  }
+
+  @Post('/reset-password')
+  resetPassword(@Body() resetPasswordDTO: ResetPasswordDTO) {
+    return this.usersService.resetPassword(resetPasswordDTO);
   }
 
   @Patch('/update')
