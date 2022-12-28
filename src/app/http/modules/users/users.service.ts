@@ -154,12 +154,17 @@ export class UsersService {
       to: user.email,
       templateId: 'd-1c75f9c61fba4e2099af3893a41e05f8',
       dynamicTemplateData: {
-        username: user.name,
+        userName: user.name,
+        userEmail: user.email,
+        userCPF: user.cpf,
         code: recoverPassCode,
       },
     });
 
-    return { message: 'Código para redefinição de senha enviado para o e-mail: ' + user.email };
+    return {
+      message: 'Código para redefinição de senha enviado para seu e-mail',
+      email: user.email,
+    };
   }
 
   async resetPassword({ code, confirmation, cpf, password }: ResetPasswordDTO) {
