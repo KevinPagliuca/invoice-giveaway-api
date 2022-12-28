@@ -6,13 +6,14 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { GiveawayStatusEnum } from 'app/shared/giveaway-status';
-import { InvoiceGiveawayStatusEnum } from 'app/shared/invoice-giveaway-status';
-import { DateRegex } from 'app/shared/validators';
-import { PrismaService } from 'database/prisma/prisma.service';
+
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
-import { generateRandomId } from 'utils/generate-id';
+import { PrismaService } from '../../../../database/prisma/prisma.service';
+import { generateRandomId } from '../../../../utils/generate-id';
+import { GiveawayStatusEnum } from '../../../shared/giveaway-status';
+import { InvoiceGiveawayStatusEnum } from '../../../shared/invoice-giveaway-status';
+import { DateRegex } from '../../../shared/validators';
 import { CreateGiveawayDTO } from './interfaces/create';
 import { UpdateGiveawayDTO } from './interfaces/update';
 

@@ -5,17 +5,17 @@ import {
   BadRequestException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { PrismaService } from 'database/prisma/prisma.service';
 import { CreateUserDTO } from './interfaces/create';
 import { sign } from 'jsonwebtoken';
 
 import { compare, hash } from 'bcryptjs';
 import { AuthCredentialsDTO } from './interfaces/auth';
-import { UserEntity } from 'database/Entities/user.entity';
 import { UpdateUserDTO } from './interfaces/update';
 import { RecoverPasswordDTO, ResetPasswordDTO } from './interfaces/recover-password';
 import { SendgridService } from '../sendgrid/sendgrid.service';
-import { generateRandomId } from 'utils/generate-id';
+import { PrismaService } from '../../../../database/prisma/prisma.service';
+import { UserEntity } from '../../../../database/entities/user.entity';
+import { generateRandomId } from '../../../../utils/generate-id';
 
 @Injectable()
 export class UsersService {

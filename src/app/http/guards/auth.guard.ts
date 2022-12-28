@@ -1,9 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 
 import { verify } from 'jsonwebtoken';
-
-import { UserEntity } from 'database/Entities/user.entity';
-import { PrismaService } from 'database/prisma/prisma.service';
+import { UserEntity } from '../../../database/entities/user.entity';
+import { PrismaService } from '../../../database/prisma/prisma.service';
 
 @Injectable()
 export class AuthorizationGuard implements CanActivate {

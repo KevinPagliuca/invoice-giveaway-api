@@ -10,7 +10,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { AuthorizationGuard } from 'app/http/guards/auth.guard';
+import { AuthorizationGuard } from '../../guards/auth.guard';
 import { GiveawayService } from './giveaway.service';
 import { CreateGiveawayDTO } from './interfaces/create';
 import { UpdateGiveawayDTO } from './interfaces/update';

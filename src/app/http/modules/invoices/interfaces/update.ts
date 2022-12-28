@@ -1,6 +1,6 @@
-import { NullOptional } from 'app/http/decorators/null-optional.decorator';
-import { CNPJRegex, DateRegex } from 'app/shared/validators';
 import { IsNotEmpty, Matches } from 'class-validator';
+import { CNPJRegex, DateRegex } from '../../../../shared/validators';
+import { NullOptional } from '../../../decorators/null-optional.decorator';
 
 export class UpdateInvoiceDTO {
   @IsNotEmpty({ message: 'O CNPJ é obrigatório' })

@@ -12,8 +12,8 @@ import {
   ValidationPipe,
   Delete,
 } from '@nestjs/common';
-import { CurrentUser } from 'app/http/decorators/current-user.decorator';
-import { AuthorizationGuard } from 'app/http/guards/auth.guard';
+import { CurrentUser } from '../../decorators/current-user.decorator';
+import { AuthorizationGuard } from '../../guards/auth.guard';
 import { AuthCredentialsDTO, ICurrentUser } from './interfaces/auth';
 import { CreateUserDTO } from './interfaces/create';
 import { RecoverPasswordDTO, ResetPasswordDTO } from './interfaces/recover-password';

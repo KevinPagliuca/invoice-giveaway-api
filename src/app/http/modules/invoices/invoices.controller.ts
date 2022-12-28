@@ -10,8 +10,8 @@ import {
   ValidationPipe,
   Delete,
 } from '@nestjs/common';
-import { CurrentUser } from 'app/http/decorators/current-user.decorator';
-import { AuthorizationGuard } from 'app/http/guards/auth.guard';
+import { CurrentUser } from '../../decorators/current-user.decorator';
+import { AuthorizationGuard } from '../../guards/auth.guard';
 import { ICurrentUser } from '../users/interfaces/auth';
 import { CreateInvoiceDTO } from './interfaces/create';
 import { UpdateInvoiceDTO } from './interfaces/update';

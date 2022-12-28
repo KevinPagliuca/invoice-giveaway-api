@@ -1,5 +1,5 @@
-import { DateRegex } from 'app/shared/validators';
 import { IsNotEmpty, Matches } from 'class-validator';
+import { DateRegex } from '../../../../shared/validators';
 
 export class CreateGiveawayDTO {
   @IsNotEmpty({ message: 'A data de início é obrigatória' })

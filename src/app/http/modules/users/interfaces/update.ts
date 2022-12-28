@@ -1,6 +1,6 @@
-import { NullOptional } from 'app/http/decorators/null-optional.decorator';
-import { CEPRegex, DateRegex } from 'app/shared/validators';
 import { IsOptional, IsNotEmpty, Matches } from 'class-validator';
+import { CEPRegex, DateRegex } from '../../../../shared/validators';
+import { NullOptional } from '../../../decorators/null-optional.decorator';
 
 export class UpdateUserDTO {
   @IsNotEmpty({ message: 'O nome é obrigatório' })

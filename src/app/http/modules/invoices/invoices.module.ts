@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
+import { DatabaseModule } from '../../../../database/database.module';
 import { InvoicesController } from './invoices.controller';
 import { InvoicesService } from './invoices.service';
 
-import { DatabaseModule } from 'database/database.module';
 @Module({
   imports: [DatabaseModule],
   providers: [InvoicesService],

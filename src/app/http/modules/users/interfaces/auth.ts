@@ -1,6 +1,6 @@
-import { CPFRegex } from 'app/shared/validators';
 import { IsNotEmpty, Matches } from 'class-validator';
-import { UserEntity } from 'database/Entities/user.entity';
+import { UserEntity } from '../../../../../database/entities/user.entity';
+import { CPFRegex } from '../../../../shared/validators';
 
 export class AuthCredentialsDTO {
   @Matches(CPFRegex, {

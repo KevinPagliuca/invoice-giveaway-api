@@ -1,6 +1,6 @@
-import { NullOptional } from 'app/http/decorators/null-optional.decorator';
-import { DateRegex } from 'app/shared/validators';
 import { Matches } from 'class-validator';
+import { DateRegex } from '../../../../shared/validators';
+import { NullOptional } from '../../../decorators/null-optional.decorator';
 
 export class UpdateGiveawayDTO {
   @Matches(DateRegex, { message: 'Formato de data inválida, Exemplo: YYYY-MM-DD ou YYYY/MM/DD' })

@@ -1,5 +1,5 @@
-import { CPFRegex } from 'app/shared/validators';
 import { IsNotEmpty, Matches } from 'class-validator';
+import { CPFRegex } from '../../../../shared/validators';
 
 export class RecoverPasswordDTO {
   @IsNotEmpty({ message: 'O CPF é obrigatório' })

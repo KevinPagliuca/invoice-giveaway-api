@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { GiveawayStatusEnum } from 'app/shared/giveaway-status';
-import { InvoiceGiveawayStatusEnum } from 'app/shared/invoice-giveaway-status';
-import { PrismaService } from 'database/prisma/prisma.service';
-import { generateRandomId } from 'utils/generate-id';
+import { PrismaService } from '../../../../database/prisma/prisma.service';
+import { generateRandomId } from '../../../../utils/generate-id';
+import { GiveawayStatusEnum } from '../../../shared/giveaway-status';
+import { InvoiceGiveawayStatusEnum } from '../../../shared/invoice-giveaway-status';
 import { CreateInvoiceDTO } from './interfaces/create';
 import { UpdateInvoiceDTO } from './interfaces/update';
 

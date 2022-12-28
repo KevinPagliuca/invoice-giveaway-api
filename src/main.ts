@@ -2,7 +2,7 @@
 
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from 'app/app.module';
+import { AppModule } from './app/app.module';
 
 const PORT = process.env.PORT || 3333;
 

@@ -1,5 +1,5 @@
-import { CEPRegex, CPFRegex, DateRegex } from 'app/shared/validators';
 import { IsEmail, IsOptional, IsNotEmpty, Matches } from 'class-validator';
+import { CEPRegex, CPFRegex, DateRegex } from '../../../../shared/validators';
 
 export class CreateUserDTO {
   @IsNotEmpty({ message: 'O CPF é obrigatório' })

@@ -1,5 +1,5 @@
-import { CNPJRegex, DateRegex } from 'app/shared/validators';
 import { IsNotEmpty, Matches } from 'class-validator';
+import { CNPJRegex, DateRegex } from '../../../../shared/validators';
 
 export class CreateInvoiceDTO {
   @IsNotEmpty({ message: 'O CNPJ é obrigatório' })
